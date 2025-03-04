@@ -1,3 +1,3 @@
-discord_owner_id="Enter the bot's owners ID"
-discord_sdk="Enter your Bot's ID"
-gemini_sdk='Enter your API key'
+discord_owner_id="enter the bots owner’s id"
+discord_sdk='bots id'
+gemini_sdk='API key'
