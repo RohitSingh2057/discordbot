@@ -20,9 +20,9 @@ class geminibot(commands.Cog):
             if mssg.content=='ping gemini':
                 await mssg.channel.send('Gemini has been linked')
             elif 'Direct Message' in str(mssg.channel) and not mssg.author.bot:
-                response = self.gemini_generate_content(mssg.content)
+                response = self.gemini_generate_content(dmchannel,mssg.content)
                 dmchannel = await mssg.author.create_dm()
-                await dmchannel.send(response.text)
+                await self.breaktext(dmchannel,response)
         except Exception as e:
             return error_mssg+str(e)
    
@@ -36,7 +36,7 @@ class geminibot(commands.Cog):
     async def ask(self,ctx,question):
         try:
             response = self.gemini_generate_content(question)
-            await ctx.send(response)
+            await self.breaktext(ctx,response)
         except Exception as e:
             await ctx.send(error_mssg + str(e))
 
@@ -44,10 +44,17 @@ class geminibot(commands.Cog):
     def gemini_generate_content(self,content):
         try:
             response = self.model.generate_content(content, stream=True)
-            text = ""
-            for chunk in response:
-                if chunk.text:
-                    text += chunk.text
-            return text
+            return response
         except Exception as e:
             return error_mssg + str(e)
+        
+    async def breaktext(self,ctx,response):
+        text = ""
+        for chunk in response:
+            text += chunk.text
+            if len(text)>2000:
+                etext=text[2000:]
+                text=text[:2000]
+                await ctx.send(text)
+                text = etext
+        await ctx.send(text)
