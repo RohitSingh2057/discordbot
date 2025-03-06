@@ -23,6 +23,7 @@ async def help(ctx):
                             color = discord.Color.dark_purple())
     MyEmbed.add_field(name = "!ask", value = "To communicate with gemini, type your questions inside quoatations", inline = False)
     MyEmbed.add_field(name = "!pm", value = "To privately chat with the bot", inline = False)
+    MyEmbed.add_field(name = "!sum", value = "To summarize website contents", inline = False)
     await ctx.send(embed = MyEmbed)
 
 

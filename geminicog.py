@@ -40,6 +40,14 @@ class geminibot(commands.Cog):
         except Exception as e:
             await ctx.send(error_mssg + str(e))
 
+    @commands.command()
+    async def sum(self,ctx,question):
+        try:
+            response = self.gemini_generate_content("Summarize: "+question+summary)
+            await self.breaktext(ctx,response)
+        except Exception as e:
+            await ctx.send(error_mssg + str(e))
+
 
     def gemini_generate_content(self,content):
         try:
@@ -50,8 +58,11 @@ class geminibot(commands.Cog):
         
     async def breaktext(self,ctx,response):
         text = ""
+        global summary
+        summary=""
         for chunk in response:
             text += chunk.text
+            summary+=text
             if len(text)>2000:
                 etext=text[2000:]
                 text=text[:2000]
